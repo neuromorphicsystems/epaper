@@ -31,7 +31,7 @@ The image must have `1304 x 984` pixels, and must be encoded in a format support
 - grey levels in the range `]222, 255]` are mapped to __white__
 - colour frames are converted to grey levels before being submitted to the previous rules; thus, colour frames with only `#000000` (black), `#ff0000` (red) and `#ffffff` (white) pixels are displayed as expected
 
-The `epaper.show` function returns only once the display is completely updated, after several seconds.
+The `epaper.show` function blocks until the display is completely updated, which typically takes several seconds.
 
 If you plan to display a sequence of images, you can open a sustained connection, which results in slightly faster updates:
 
@@ -39,16 +39,16 @@ If you plan to display a sequence of images, you can open a sustained connection
 import epaper
 
 with open('/dev/ttyACM0') as display:
-    # do something with display
+    # call multiple functions
 ```
 
 The `display` object has two methods:
 - `display.show(filename)` loads and displays the image file at the given path
 - `display.send(frame)` displays a numpy array containing pixel values
 
-Both methods will block until the display is fully updated, and usee the same rules as `epaper.show`.
+Both methods will block until the display is fully updated, and use the same rules as `epaper.show`.
 
-The frame provided to `display.send` must be a `numpy.array` with `shape == (984, 1304)` and `dtype == numpy.uint8`. The grey levels rules mentionned earlier are used to map the pixel values to black, red and white.
+The frame provided to `display.send` must be a `numpy.array` with `shape == (984, 1304)` and `dtype == numpy.uint8`.
 
 The file *scripts/example.py* demonstrates the use of all `epaper.show`, `display.show` and `display.send`.
 
