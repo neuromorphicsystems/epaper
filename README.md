@@ -12,7 +12,7 @@ pip3 install -r requirements.txt
 
 # Documentation
 
-The ePaper display has __1304__ by __984__ pixels. Each pixel can be either __black__, __white__ or __red__. Power is only required when updating the display. An display update takes several seconds.
+The ePaper display has __1304__ by __984__ pixels. Each pixel can be either __black__, __white__ or __red__. Power is only required when updating the display. An update takes several seconds.
 
 ## Python interface
 
