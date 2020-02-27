@@ -1,3 +1,5 @@
+<img src="epaper.png" width="500">
+
 # Install
 
 ```sh
