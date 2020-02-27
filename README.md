@@ -33,6 +33,8 @@ The image must have `1304 x 984` pixels, and must be encoded in a format support
 
 The `epaper.show` function blocks until the display is completely updated, which typically takes several seconds.
 
+`epaper.width` and `epaper.height` return the width and height of the display (in pixels).
+
 If you plan to display a sequence of images, you can open a sustained connection, which results in slightly faster updates:
 
 ```py
