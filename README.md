@@ -1,4 +1,6 @@
-<img src="epaper.png" width="500">
+<p align="center">
+    <img src="epaper.png" width="500">
+</p>
 
 # Install
 
