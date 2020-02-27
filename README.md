@@ -12,11 +12,29 @@ pip3 install -r requirements.txt
 
 # Documentation
 
-The ePaper display has __1304__ by __984__ pixels. Each pixel can be either __black__, __white__ or __red__. Power is only required when updating the display.
+The ePaper display has __1304__ by __984__ pixels. Each pixel can be either __black__, __white__ or __red__. Power is only required when updating the display. An display update takes several seconds.
 
 ## Python interface
 
-The Python interface consists of a single file: *scripts/epaper.py*. To use the display, one must first create a connection:
+The Python interface consists of a single file: *scripts/epaper.py*. To display an image, use:
+```py
+import epaper
+
+epaper.show('/dev/ttyACM0', '/path/to/file.png')
+```
+
+`'/dev/ttyACM0'` must be replaced with the display's serial port, specific to your machine. This name may change after un-plugging the USB cable. The serial name is generally `'COM*'` on Windows (where `*` is a number), and `'/dev/tty.usbserial-*'` on macOS (where `*` is a string).
+
+The image must have `1304 x 984` pixels, and must be encoded in a format supported by the [Pillow library](https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html). The following rules apply to display the frame:
+- grey levels in the range `[0, 32[` are mapped to __black__
+- grey levels in the range `[32, 222]` are mapped to __red__
+- grey levels in the range `]222, 255]` are mapped to __white__
+- colour frames are converted to grey levels before being submitted to the previous rules; thus, colour frames with only `#000000` (black), `#ff0000` (red) and `#ffffff` (white) pixels are displayed as expected
+
+The `epaper.show` function returns only once the display is completely updated, after several seconds.
+
+If you plan to display a sequence of images, you can open a sustained connection, which results in slightly faster updates:
+
 ```py
 import epaper
 
@@ -24,21 +42,15 @@ with open('/dev/ttyACM0') as display:
     # do something with display
 ```
 
-`'/dev/ttyACM0'` must be replaced with the display's serial port, specific to your machine. This name may change after un-plugging the USB cable. The serial name is generally `'COM*'` on Windows (where `*` is a number), and `'/dev/tty.usbserial-*'` on macOS (where `*` is a string).
-
 The `display` object has two methods:
 - `display.show(filename)` loads and displays the image file at the given path
 - `display.send(frame)` displays a numpy array containing pixel values
 
-The image passed to `display.show` must have `1304 x 984` pixels, and must be encoded in a format supported by the [Pillow library](https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html). The following rules apply to display the frame:
-- grey levels in the range `[0, 32[` are mapped to __black__
-- grey levels in the range `[32, 222]` are mapped to __red__
-- grey levels in the range `]222, 255]` are mapped to __white__
-- colour frames are converted to grey levels before being submitted to the previous rules; thus, colour frames with only `#000000` (black), `#ff0000` (red) and `#ffffff` (white) pixels are displayed as expected
+Both methods will block until the display is fully updated, and usee the same rules as `epaper.show`.
 
 The frame provided to `display.send` must be a `numpy.array` with `shape == (984, 1304)` and `dtype == numpy.uint8`. The grey levels rules mentionned earlier are used to map the pixel values to black, red and white.
 
-The file *scripts/example.py* demonstrates the use of `display.show`.
+The file *scripts/example.py* demonstrates the use of all `epaper.show`, `display.show` and `display.send`.
 
 ## Hardware documentation
 

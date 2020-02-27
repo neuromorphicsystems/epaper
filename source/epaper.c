@@ -292,20 +292,24 @@ int main(void) {
                     }
                 }
                 _delay_ms(300);
-                send_command_all(0x02, NULL, 0);
-                _delay_ms(300);
-                send_command_all(0x07, (const uint8_t[]){0xa5}, 1);
-                _delay_ms(300);
                 serial_transfer('r');
                 ++state.index;
                 break;
             case 9:
                 if ((UCSR0A >> RXC0) & 1) {
-                    if (UDR0 == 'r') {
+                    const uint8_t code = UDR0;
+                    if (code == 'r') {
                         state.index = 0;
                         state.count = 0;
                         state.buffer_read = 0;
                         state.buffer_write = 0;
+                    } else if (code == 's') {
+                        send_command_all(0x02, NULL, 0);
+                        _delay_ms(300);
+                        send_command_all(0x07, (const uint8_t[]){0xa5}, 1);
+                        _delay_ms(300);
+                        state.index = 10;
+                        serial_transfer('s');
                     }
                 }
                 break;

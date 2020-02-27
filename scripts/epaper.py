@@ -24,6 +24,10 @@ class open:
             raise Exception('the Arduino initialization failed')
         return self
     def __exit__(self, type, value, traceback):
+        self.arduino.write(b's')
+        if self.arduino.read()[0] != ord('s'):
+            self.arduino.close()
+            raise Exception('the display has not entered sleep mode')
         self.arduino.close()
     def send(self, frame):
         """
@@ -69,3 +73,7 @@ class open:
         """
         import PIL.Image
         self.send(numpy.asarray(PIL.Image.open(filename).convert('L')))
+
+def show(device, filename):
+    with open(filename) as display:
+        display.show(filename)
