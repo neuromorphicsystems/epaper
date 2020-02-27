@@ -16,7 +16,7 @@ The ePaper display has __1304__ by __984__ pixels. Each pixel can be either __bl
 
 ## Python interface
 
-The Python interface is made of a single file: *scripts/epaper.py*. To use the display, one must first create a connection:
+The Python interface consists of a single file: *scripts/epaper.py*. To use the display, one must first create a connection:
 ```py
 import epaper
 
@@ -27,14 +27,14 @@ with open('/dev/ttyACM0') as display:
 `'/dev/ttyACM0'` must be replaced with the display's serial port, specific to your machine. This name may change after un-plugging the USB cable. The serial name is generally `'COM*'` on Windows (where `*` is a number), and `'/dev/tty.usbserial-*'` on macOS (where `*` is a string).
 
 The `display` object has two methods:
-- `display.show(filename)` loads and displays the image file at given path
+- `display.show(filename)` loads and displays the image file at the given path
 - `display.send(frame)` displays a numpy array containing pixel values
 
 The image passed to `display.show` must have `1304 x 984` pixels, and must be encoded in a format supported by the [Pillow library](https://pillow.readthedocs.io/en/stable/handbook/image-file-formats.html). The following rules apply to display the frame:
 - grey levels in the range `[0, 32[` are mapped to __black__
 - grey levels in the range `[32, 222]` are mapped to __red__
 - grey levels in the range `]222, 255]` are mapped to __white__
-- colour frames are first converted to grey levels before being submitted to the previous rules; notably, colour frames with only `#000000` (black), `#ff0000` (red) and `#ffffff` (white) pixels will be displayed as expected
+- colour frames are converted to grey levels before being submitted to the previous rules; thus, colour frames with only `#000000` (black), `#ff0000` (red) and `#ffffff` (white) pixels are displayed as expected
 
 The frame provided to `display.send` must be a `numpy.array` with `shape == (984, 1304)` and `dtype == numpy.uint8`. The grey levels rules mentionned earlier are used to map the pixel values to black, red and white.
 
