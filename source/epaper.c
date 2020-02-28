@@ -5,7 +5,7 @@
 #include <util/delay.h>
 
 // serial baudrate
-const uint32_t baudrate = 2000000;
+const uint32_t baudrate = 1000000;
 
 // GPIOs
 const uint8_t m1_cs_pin = DDD2;
@@ -153,9 +153,8 @@ int main(void) {
     PORTB |= (1 << sram_cs1_pin) | (1 << sram_cs2_pin) | (1 << sram_cs3_pin);
 
     // enable USART
-    UBRR0H = ((F_CPU / 8) / baudrate - 1) >> 8;
-    UBRR0L = ((F_CPU / 8) / baudrate - 1) & 0xff;
-    UCSR0A |= (1 << U2X0);
+    UBRR0H = ((F_CPU / 16) / baudrate - 1) >> 8;
+    UBRR0L = ((F_CPU / 16) / baudrate - 1) & 0xff;
     UCSR0B |= (1 << RXEN0) | (1 << TXEN0);
     UCSR0C |= (1 << UCSZ01) | (1 << UCSZ00);
 
@@ -312,6 +311,8 @@ int main(void) {
                         serial_transfer('s');
                     }
                 }
+                break;
+            case 10:
                 break;
             default:
                 break;

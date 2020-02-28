@@ -18,7 +18,7 @@ class open:
             492 * 81,
             492 * 81)))
     def __enter__(self):
-        self.arduino = serial.Serial(self.device, baudrate=2000000)
+        self.arduino = serial.Serial(self.device, baudrate=1000000)
         if self.arduino.read()[0] != ord('r'):
             self.arduino.close()
             raise Exception('the Arduino initialization failed')
@@ -29,6 +29,7 @@ class open:
             self.arduino.close()
             raise Exception('the display has not entered sleep mode')
         self.arduino.close()
+        return False
     def send(self, frame):
         """
         Sends a frame to the ePaper display, and waits until the frame is displayed.
@@ -75,5 +76,5 @@ class open:
         self.send(numpy.asarray(PIL.Image.open(filename).convert('L')))
 
 def show(device, filename):
-    with open(filename) as display:
+    with open(device) as display:
         display.show(filename)
