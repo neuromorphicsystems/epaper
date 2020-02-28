@@ -14,6 +14,14 @@ with epaper.open(device) as display:
     print('display.show')
     display.show('example.png')
 
+# show multiple images (identical to the previous block)
+display = epaper.open(device)
+print('display.show')
+display.show('example.png')
+print('display.show')
+display.show('example.png')
+display.close()
+
 # use a numpy array
 with epaper.open(device) as display:
     frame = numpy.zeros((epaper.height, epaper.width), dtype=numpy.uint8)
