@@ -17,18 +17,20 @@ class open:
             492 * 82,
             492 * 81,
             492 * 81)))
-    def __enter__(self):
         self.arduino = serial.Serial(self.device, baudrate=1000000)
         if self.arduino.read()[0] != ord('r'):
             self.arduino.close()
             raise Exception('the Arduino initialization failed')
-        return self
-    def __exit__(self, type, value, traceback):
+    def close(self):
         self.arduino.write(b's')
         if self.arduino.read()[0] != ord('s'):
             self.arduino.close()
             raise Exception('the display has not entered sleep mode')
         self.arduino.close()
+    def __enter__(self):
+        return self
+    def __exit__(self, type, value, traceback):
+        self.close()
         return False
     def send(self, frame):
         """

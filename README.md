@@ -40,11 +40,20 @@ If you plan to display a sequence of images, you can open a sustained connection
 ```py
 import epaper
 
-with open('/dev/ttyACM0') as display:
+with epaper.open('/dev/ttyACM0') as display:
     # call multiple functions
 ```
 
-The `display` object has two methods:
+You can also use the equivalent syntax:
+```py
+import epaper
+
+display = epaper.open('/dev/ttyACM0')
+# call multiple functions
+epaper.close()
+```
+
+The `display` object provides two methods to show images:
 - `display.show(filename)` loads and displays the image file at the given path
 - `display.send(frame)` displays a numpy array containing pixel values
 
